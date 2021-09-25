@@ -17,6 +17,9 @@ class AuthController extends Controller
             'house_number_extension' => 'string|nullable',
             'city' => 'required|string',
             'street' => 'required|string',
+            'function' => 'required|string',
+            'rights' => 'required|string',
+            'default_travel_option' => 'string|nullable',
             'postal_code' => 'required|string',
             'wage_number' => 'required|string',
             'email' => 'required|string|unique:users,email',
@@ -27,16 +30,19 @@ class AuthController extends Controller
             'firstname' => $fields['firstname'],
             'lastname' => $fields['lastname'],
             'house_number' => $fields['house_number'],
-            'house_number_extension' => $fields['house_number_extension'],
+            'house_number_extension' => $fields['house_number_extension'] ?? null,
             'city' => $fields['city'],
             'street' => $fields['street'],
+            'function' => $fields['function'],
+            'rights' => $fields['rights'],
+            'default_travel_option' => $fields['default_travel_option'] ?? null,
             'postal_code' => $fields['postal_code'],
             'wage_number' => $fields['wage_number'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
         ]);
 
-        $token = $user->createToken('managementToolToken')->plainTextToken;
+        $token = $user->createToken($fields['email'])->plainTextToken;
 
         $response = [
             'user' => $user,

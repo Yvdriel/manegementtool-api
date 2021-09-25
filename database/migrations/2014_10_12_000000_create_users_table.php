@@ -23,6 +23,9 @@ class CreateUsersTable extends Migration
             $table->string('street');
             $table->string('postal_code');
             $table->string('wage_number');
+            $table->string('default_travel_option')->nullable();
+            $table->string('function');
+            $table->string('rights');
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();

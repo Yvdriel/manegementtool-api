@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shift;
+use App\Models\SecurityPass;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ShiftController extends Controller
+class SecurityPassController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,7 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        $response = [
-            'Message' => 'Ok',
-            'Response' => Shift::all(),
-        ];
-
-        return response($response);
+        return response(SecurityPass::all());
     }
 
     /**
@@ -31,16 +26,7 @@ class ShiftController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'project_id' => 'required',
-            'company_id' => 'required',
-            'name' => 'required',
-            'date' => 'required',
-            'time_start' => 'required',
-            'time_end' => 'required'
-        ]);
-
-        return response(Shift::create($request->all()));
+        //
     }
 
     /**
@@ -51,7 +37,7 @@ class ShiftController extends Controller
      */
     public function show($id)
     {
-        return response(Shift::find($id));
+        return response(SecurityPass::where('user_id', $id)->get());
     }
 
     /**
@@ -63,10 +49,10 @@ class ShiftController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $shift = Shift::find($id);
-        $shift->update($request->all());
+        $securityPass = SecurityPass::where('user_id', $id)->get();
+        $securityPass->update($request->all());
 
-        return response($shift);
+        return response($securityPass);
     }
 
     /**
@@ -77,6 +63,6 @@ class ShiftController extends Controller
      */
     public function destroy($id)
     {
-        return response(Shift::destroy($id));
+        return response(SecurityPass::destroy($id));
     }
 }

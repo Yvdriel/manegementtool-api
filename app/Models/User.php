@@ -26,6 +26,9 @@ class User extends Authenticatable
         'street',
         'postal_code',
         'wage_number',
+        'function',
+        'rights',
+        'default_travel_option',
         'email',
         'password',
     ];

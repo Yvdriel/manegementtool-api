@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ShiftRegistryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,10 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('shifts', ShiftController::class);
+    Route::resource('shiftRegistries', ShiftRegistryController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-
 });

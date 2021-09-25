@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shift;
+use App\Models\ShiftRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ShiftController extends Controller
+class ShiftRegistryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,7 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        $response = [
-            'Message' => 'Ok',
-            'Response' => Shift::all(),
-        ];
-
-        return response($response);
+        return response(ShiftRegistry::all());
     }
 
     /**
@@ -32,15 +27,16 @@ class ShiftController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'project_id' => 'required',
-            'company_id' => 'required',
-            'name' => 'required',
-            'date' => 'required',
+            'shift_id' => 'required',
+            'user_id' => 'required',
             'time_start' => 'required',
-            'time_end' => 'required'
+            'time_end' => 'required',
+            'available' => 'required|nullable',
+            'approved' => 'boolean|nullable',
+            'approved_by' => 'integer|nullable',
         ]);
 
-        return response(Shift::create($request->all()));
+        return response(ShiftRegistry::create($request->all()));
     }
 
     /**
@@ -51,7 +47,7 @@ class ShiftController extends Controller
      */
     public function show($id)
     {
-        return response(Shift::find($id));
+        return response(ShiftRegistry::find($id));
     }
 
     /**
@@ -63,10 +59,10 @@ class ShiftController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $shift = Shift::find($id);
-        $shift->update($request->all());
+        $shiftRegistry = ShiftRegistry::find($id);
+        $shiftRegistry->update($request->all());
 
-        return response($shift);
+        return response($shiftRegistry);
     }
 
     /**
@@ -77,6 +73,6 @@ class ShiftController extends Controller
      */
     public function destroy($id)
     {
-        return response(Shift::destroy($id));
+        return response(ShiftController::destroy($id));
     }
 }
