@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shift;
+use App\Models\Project;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 
 class ShiftController extends Controller
 {
@@ -15,10 +18,17 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        $response = [
-            'Message' => 'Ok',
-            'Response' => Shift::all(),
-        ];
+        $response = [];
+        $shifts = Shift::all();
+
+        foreach($shifts as $shift) {
+            $shift = $this->formatDate($shift);
+
+            $response[$shift['id']] = [
+                'shift' => $shift,
+                'project' => Project::find($shift['project_id']),
+            ];
+        }
 
         return response($response);
     }
@@ -51,7 +61,13 @@ class ShiftController extends Controller
      */
     public function show($id)
     {
-        return response(Shift::find($id));
+        $shift = Shift::find($id);
+        $response = [
+            'shift' => $shift,
+            'project' => Project::find($shift['project_id']),
+        ];
+
+        return response($response);
     }
 
     /**
@@ -78,5 +94,25 @@ class ShiftController extends Controller
     public function destroy($id)
     {
         return response(Shift::destroy($id));
+    }
+
+    private function formatDate($shift)
+    {
+        $timeStart = new DateTime($shift['time_start']);
+        $timeEnd = new DateTime($shift['time_end']);
+        $date = new DateTime($shift['date']);
+
+
+        $dateFormattedArray = explode(" ", $date->format('d M Y'));
+        $constants = Config::get('constants.date');
+        $dateFormattedArray[1] = $constants[$dateFormattedArray[1]];
+
+        $dateFormatted = $dateFormattedArray[0] . ' ' . $dateFormattedArray[1] . ' ' . $dateFormattedArray[2];
+
+        $shift['time_start'] = $timeStart->format('H:i');
+        $shift['time_end'] = $timeEnd->format('H:i');
+        $shift['date_formatted'] = $dateFormatted;
+
+        return $shift;
     }
 }

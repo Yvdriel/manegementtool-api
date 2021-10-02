@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShiftRegistryController;
@@ -22,6 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('shifts', ShiftController::class);
+    Route::resource('projects', ProjectController::class);
     Route::resource('shiftRegistries', ShiftRegistryController::class);
 
     Route::post('/logout', [AuthController::class, 'logout']);
