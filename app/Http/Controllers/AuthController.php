@@ -66,7 +66,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('managementToolToken')->plainTextToken;
+        $token = $user->createToken($fields['email'])->plainTextToken;
 
         $response = [
             'user' => $user,
